@@ -1,0 +1,66 @@
+<html>
+<head>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/1.1.0/annyang.min.js"></script>
+  <script src="tree.js"></script>
+  <script>
+  if (annyang) {
+    annyang.debug(true);
+    //annyang.setLanguage('pt-BR');
+    
+    annyang.addCallback('resultNoMatch', function () {
+      document.getElementById("noMatch").style.display = 'block';
+    });
+    annyang.addCallback('resultMatch', function () {
+      document.getElementById("noMatch").style.display = 'none';
+    });
+
+    // Start listening. You can call this here, or attach this call to an event, button, etc.
+    annyang.start();
+  }
+  </script>
+
+</head>
+<body>
+  <div id="haha"></div>
+  <script>
+    var x = new XMLHttpRequest();
+    x.overrideMimeType("application/json");
+    x.open('GET', 'tree.json', false);
+    x.send();
+    var j = JSON.parse(x.responseText);
+
+    function genCmd(next, hook) {
+      return (function () {
+        if (next) loadSpeech(next);
+        if (hook) triggerHook(hook);
+      });
+    }
+    
+    var loadSpeech = function(id) {
+      console.log('looking for ' + id);
+      for (var i=0; i < j.dialogues.length; i++) {
+        if (j.dialogues[i].id == id) {
+          console.log('found');
+          var d = j.dialogues[i];
+          document.getElementById('haha').innerHTML = d.text;
+          
+          if (d.options) {
+            for (var k=0; k < d.options.length; k++) {
+              document.getElementById('haha').innerHTML += '<br/> ' + (k+1) + '. ' + d.options[k].text;
+              
+              var cmd = {};
+              var next = d.options[k].next;
+              var hook = d.options[k].hook;
+              cmd[d.options[k].command] = genCmd(next, hook);
+              console.log(d.options[k].command + ' -> ' + d.options[k].next);
+              annyang.addCommands(cmd);
+            }
+          }
+        }
+      }
+    }
+    loadSpeech(j.dialogues[0].id);
+  </script>
+  <span id="noMatch" style="color:red;display:none">Sorry, couldn't understand your statement. Please try again.</span>
+</body>
+</html>
