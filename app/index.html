@@ -70,7 +70,25 @@
   var notifyNoSup =   function () { notifyError('Seems like your browser doesn&#39;t support voice recognition ): <br /> Please come back using Chrome...'); };
   var notifyNoMatch = function () { notifyWarning('Sorry, couldn&#39;t understand your statement. Please try again.'); };
   
-  
+  var SpeechSynthesisUtterance =  window.SpeechSynthesisUtterance ||
+                                  window.webkitSpeechSynthesisUtterance ||
+                                  window.mozSpeechSynthesisUtterance ||
+                                  window.msSpeechSynthesisUtterance ||
+                                  window.oSpeechSynthesisUtterance;
+
+  var speakIt = function (text) {
+    var utterance = new SpeechSynthesisUtterance(text);
+    speechSynthesis.speak(utterance);
+  }
+  var speakContent = function () {
+    speakIt($('.text').html());
+    speakIt('Your choices are:');
+    $('.option').each( function () {
+      speakIt($(this).html());
+    });
+    speakIt('Please state your choice out loud.');
+  }
+
   if (annyang) {
     // set up annyang
     //annyang.debug(true);
@@ -109,12 +127,13 @@
             if (d.options) {
               for (var k=0; k < d.options.length; k++) {
                 // create option element
-                var opt = $("<div></div>", {  id: 'opt' + (k+1),
-                                              class: 'option',
-                                              display: 'block'});
-                opt.html((k+1) + '. ' + d.options[k].text);
-                $(".options").append(opt); // display it
-                
+                var opt = $("<div></div>", {
+                                id: 'opt' + (k+1),
+                                class: 'option',
+                                display: 'block'})
+                        .html((k+1) + '. ' + d.options[k].text)
+                        .appendTo(".options");
+
                 // prepare command
                 var cmd = {};
                 var next = d.options[k].next;
@@ -127,6 +146,7 @@
           }
         }
         $(".container").fadeIn(1500); // good to go
+        speakContent();
       }
       // retrieving JSON with our story
       var j = {};
