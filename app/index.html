@@ -136,6 +136,7 @@
       }
       
       var loadSpeech = function(id) {
+        cancelVoice();
         if (!id) id = 1;
         annyang.removeCommands(); // clear stored commands
         $("#container").hide();
