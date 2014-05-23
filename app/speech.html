@@ -1,6 +1,8 @@
 <html>
 <head>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/1.1.0/annyang.min.js"></script>
+  <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/1.1.0/annyang.min.js"></script> -->
+  
+  <script src="annyang.js"></script>
   <script src="tree.js"></script>
   <script>
   if (annyang) {
@@ -14,11 +16,18 @@
       document.getElementById("noMatch").style.display = 'none';
     });
 
+    annyang.addCallback('start', function() {
+      document.getElementById('noMic').style.display = 'none';
+    });
+    annyang.addCallback('end', function() {
+      document.getElementById('noMic').style.display = 'block';
+    });
     // Start listening. You can call this here, or attach this call to an event, button, etc.
     annyang.start();
+  } else {
+    document.getElementById('noSupport').style.display = 'block';
   }
   </script>
-
 </head>
 <body>
   <div id="haha"></div>
@@ -30,13 +39,14 @@
     var j = JSON.parse(x.responseText);
 
     function genCmd(next, hook) {
-      return (function () {
+      return function (event) {
         if (next) loadSpeech(next);
         if (hook) triggerHook(hook);
-      });
+      };
     }
     
     var loadSpeech = function(id) {
+      annyang.removeCommands();
       console.log('looking for ' + id);
       for (var i=0; i < j.dialogues.length; i++) {
         if (j.dialogues[i].id == id) {
@@ -47,7 +57,6 @@
           if (d.options) {
             for (var k=0; k < d.options.length; k++) {
               document.getElementById('haha').innerHTML += '<br/> ' + (k+1) + '. ' + d.options[k].text;
-              
               var cmd = {};
               var next = d.options[k].next;
               var hook = d.options[k].hook;
@@ -62,5 +71,7 @@
     loadSpeech(j.dialogues[0].id);
   </script>
   <span id="noMatch" style="color:red;display:none">Sorry, couldn't understand your statement. Please try again.</span>
+  <span id="noMic" style="color:red;display:block">Unable to use your microphone. Please allow it.</span>
+  <span id="noSupport" style="color:red;display:none">Sorry, but it looks like your browser does not support the Voice Recognition API ): <br /> Please try again with Chrome...</span>
 </body>
 </html>

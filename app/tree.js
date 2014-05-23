@@ -1,4 +1,4 @@
-(function (undefined) {
+//(function (undefined) {
   "use strict";
 
   var hooks = {};
@@ -12,4 +12,4 @@
   hooks['end'] = function() {
     alert('THE END!');
   }
-})();
+//}).call(this);
