@@ -43,6 +43,10 @@
   <script src="libs/noty/js/noty/themes/default.js"></script>
   <script src="tree.js"></script>
   <script>
+  var supportTTS = function () {
+    return ('speechSynthesis' in window);
+  }
+
   var notifyError = function (msg) {
     $('#errorOverlay').fadeIn();
     noty({
@@ -52,7 +56,13 @@
             type: 'error',
             text: msg,
             callback: {
-              afterClose: function () { $('#errorOverlay').fadeOut(); }
+              afterClose: function () { 
+                $('#errorOverlay').fadeOut();
+                resumeVoice();
+              },
+              onShow: function() {
+                pauseVoice();
+              }
             }
     });
   };
@@ -76,6 +86,15 @@
                                   window.msSpeechSynthesisUtterance ||
                                   window.oSpeechSynthesisUtterance;
 
+  var pauseVoice = function () {
+    if (supportTTS()) speechSynthesis.pause();
+  }
+  var resumeVoice = function () {
+    if (supportTTS()) speechSynthesis.resume();
+  }
+  var cancelVoice = function () { // will discard queue!
+    if (supportTTS()) speechSynthesis.cancel();
+  }
   var speakIt = function (text) {
     var utterance = new SpeechSynthesisUtterance(text);
     speechSynthesis.speak(utterance);
@@ -98,7 +117,12 @@
     annyang.addCallback('start',          function () { $.noty.closeAll();  });
     annyang.addCallback('end',            function () { notifyNoMic();      });
   }
-  
+
+  $(window).unload(function () {
+    alert('unload');
+    cancelVoice();
+  });
+
   $(document).ready(function () {
     if (annyang) { // client supports Voice Recognition
       notifyNoMic();
