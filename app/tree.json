@@ -6,14 +6,14 @@
                   "options":
                             [
                               {"text": "Do you [go inside]?", "command": "go inside", "next": "002"},
-                              {"text": "Do you [stay there]?", "command": "stay there", "next": "003", "hook": "end"}
+                              {"text": "Do you [stay there]?", "command": "stay there", "next": "003"}
                             ]},
                 
                 { "id": "002",
                   "text": "You say, &#39;I will go inside.&#39; He says, &#39;I want to watch you.&#39; You start up the stone steps of the old haunted house. You open the door and step inside and suddenly a sharp arrow streaks across in front of you! But it misses you.",
                   "options":
                             [
-                              {"text": "Do you go up the [staircase]?", "command": "staircase", "next": "004", "hook": "end"},
+                              {"text": "Do you go up the [staircase]?", "command": "staircase", "next": "004"},
                               {"text": "Do you go through the [swinging doors]?", "command": "swinging doors", "next": "005"}
                             ]},
                 
@@ -27,8 +27,8 @@
                   "text": "You go through the swinging doors. You walk through the room.",
                   "options":
                             [
-                              {"text": "Do you go into the [closet]?", "command": "closet", "next": "006", "hook": "end"},
-                              {"text": "Do you go into the [passageway] under the house?", "command": "passageway", "next": "007", "hook": "end"}
+                              {"text": "Do you go into the [closet]?", "command": "closet", "next": "006"},
+                              {"text": "Do you go into the [passageway] under the house?", "command": "passageway", "next": "007"}
                             ]},
                 
                 { "id": "006",
