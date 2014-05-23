@@ -1,3 +1,0 @@
-[submodule "noty"]
-	path = app/libs/noty
-	url = https://github.com/rgoliveira/noty.git
