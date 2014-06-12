@@ -1,6 +1,6 @@
-[submodule "app/libs/noty"]
-	path = app/libs/noty
+[submodule "libs/noty"]
+	path = libs/noty
 	url = https://github.com/rgoliveira/noty.git
-[submodule "app/libs/annyang"]
-	path = app/libs/annyang
+[submodule "libs/annyang"]
+	path = libs/annyang
 	url = https://github.com/rgoliveira/annyang.git
